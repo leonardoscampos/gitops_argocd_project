@@ -69,5 +69,20 @@ pipeline {
                 }
             }
         }
+        stage ('Push change to Git') {
+            steps {
+                script {
+                    sh """
+                    git config --global user.name "leonardoscampos"
+                    git config --global user.email "campos.silvaleonardo@gmail.com"
+                    git add deployment.yml
+                    git commit -am "updated the deployment file"
+                    """
+                    withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
+                      sh "git push https://github.com/leonardoscampos/gitops_argocd_project.git main"
+                    }
+                }
+            }
+        }
     }
 }
