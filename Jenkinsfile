@@ -21,5 +21,24 @@ pipeline {
                 }
             }
         }
+
+        stage ('Checkout SCM') {
+
+            steps {
+                script {
+                    git credentialsId: 'github',
+                    url: 'https://github.com/leonardoscampos/gitops_argocd_project.git',
+                    branch: 'main'
+                }
+            }
+        }
+        
+        stage ('build Docker image') {
+            steps {
+                script {
+                    docker_image = docker.build "${IMAGE_NAME}"
+                }
+            }
+        }
     }
 }
